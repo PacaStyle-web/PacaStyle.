@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - PacaStyle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Copia estilos similares de index.html para consistencia */
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #dda0dd, #ffffff, #9370db); color: #333; padding: 20px; }
+        .logo { font-size: 2em; color: #8a2be2; text-align: center; }
+        #carrito-lista { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        .item { display: flex; align-items: center; margin-bottom: 10px; }
+        .item img { width: 50px; height: 50px; margin-right: 10px; }
+        button { background: #8a2be2; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="logo">PacaStyle - Carrito</div>
+    <div id="carrito-lista"></div>
+    <p>Total: $<span id="total">0</span></p>
+    <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+    <a href="index1.html">Volver a Inicio</a>
+    
+    <script>
+        function mostrarCarrito() {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let lista = document.getElementById('carrito-lista');
+            let total = 0;
+            lista.innerHTML = '';
+            carrito.forEach((item, index) => {
+                total += item.precio;
+                lista.innerHTML += `
+                    <div class="item">
+                        <img src="${item.imagen}" alt="${item.nombre}">
+                        <span>${item.nombre} - $${item.precio}</span>
+                        <button onclick="eliminarItem(${index})">Eliminar</button>
+                    </div>
+                `;
+            });
+            document.getElementById('total').textContent = total;
+        }
+        
+        function eliminarItem(index) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.splice(index, 1);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            mostrarCarrito();
+        }
+        
+        function vaciarCarrito() {
+            localStorage.removeItem('carrito');
+            mostrarCarrito();
+        }
+        
+        window.onload = mostrarCarrito;
+    </script>
+</body>
+</html>
